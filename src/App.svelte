@@ -1,17 +1,44 @@
 <script>
+	import { onMount } from "svelte";
+	import { apiData, drinkNames } from './store.js';
 	export let name;
+
+	onMount(async () => {
+		fetch(
+			"https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=Bourbon"
+		)
+			.then((response) => response.json())
+			.then((data) => {
+				console.log(data);
+				apiData.set(data);
+			})
+			.catch((error) => {
+				console.log(error);
+				return [];
+			});
+	});
 </script>
 
 <main>
+	<div class="intro"> 
 	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+	<p>Welcome to my first svelte project !</p>
+	<p><b>Look how I make an amazing API call:</b></p>
+	</div> 
+	<div>
+		<ul>
+			{#each $drinkNames as drinkName}
+				<li>{drinkName}</li>
+			{/each}
+			</ul>
+	</div>
+
 </main>
 
 <style>
-	main {
+	.intro {
 		text-align: center;
 		padding: 1em;
-		max-width: 240px;
 		margin: 0 auto;
 	}
 
